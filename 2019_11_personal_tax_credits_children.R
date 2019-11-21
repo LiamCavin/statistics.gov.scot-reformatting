@@ -125,14 +125,14 @@ reformat.tax.credits <- function(x) {
 ### 5 Reformat raw data into tidy           ----------------------------------
 #=============================================================================
 
-laf_tidy <- pipe.format(la_children, 2, "2016/17", 1000)
+laf_tidy <- pipe.format(la_children, 2, "2017/18", 1000)
 for (i in 3:12){
-  laf_tidy <- rbind(laf_tidy, pipe.format(la_children, i, "2016/17", 1000))
+  laf_tidy <- rbind(laf_tidy, pipe.format(la_children, i, "2017/18", 1000))
 }
 
-dzf_tidy <- pipe.format(dz_children, 2, "2016/17", 1)
+dzf_tidy <- pipe.format(dz_children, 2, "2017/18", 1)
 for (i in 3:12){
-  dzf_tidy <- rbind(dzf_tidy, pipe.format(dz_children, i, "2016/17", 1))
+  dzf_tidy <- rbind(dzf_tidy, pipe.format(dz_children, i, "2017/18", 1))
 }
 
 laf_tidy <- reformat.tax.credits(laf_tidy)
@@ -146,6 +146,6 @@ children_forupload[,1] <-  str_replace_all(children_forupload[,1], fixed("S12000
 children_forupload[,1] <-  str_replace_all(children_forupload[,1], fixed("S12000044"), "S12000050")
 children_forupload[,1] <-  str_replace_all(children_forupload[,1], fixed("S12000046"), "S12000049")
 
-write.csv(children_forupload, "children1617_forupload.csv", row.names=FALSE)
+write.csv(children_forupload, "children1718_forupload.csv", row.names=FALSE)
 
 # yaldi
