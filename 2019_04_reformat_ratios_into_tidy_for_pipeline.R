@@ -11,13 +11,10 @@
 #*****************************************************************************
 #=============================================================================
 
-
-
 # start with a clean slate
 #=========================
 
 rm(list=ls())
-
 
 # load in the approriate package
 # and any others that are needed 
@@ -27,25 +24,21 @@ rm(list=ls())
 # the tidyverse
 install.packages("tidyverse")
 
-
 # set the working directory
 #===========================
 
-setwd("//scotland.gov.uk//dc1//fs3_home//u441625//Statistics.gov.uk//Data Loading//2019.04 dwellings by room spc fix")
+setwd("")
 list.files()
-
 
 # Load in the data dwellings by type, as extracted from
 # statistics.gov.scot using the data cart
 #==================================================================
-
 
 rawratio <- read.csv("dwellings by room ew spc ratios for munging.csv", stringsAsFactors = FALSE)
 
 head(rawratio)
 dim(rawratio)
 colnames(rawratio)
-
 
 # Create a function to reformat the data into tidy
 
@@ -66,17 +59,7 @@ tidy <- tidymunge(rawratio,3)
 
 for(i in 4:46){
   tidy <- rbind(tidy, tidymunge(rawratio,i))
-  
 }
-
-head(tidy)
-unique(tidy[1])
-unique(tidy[2])
-unique(tidy[3])
-unique(tidy[4])
-unique(tidy[5])
-unique(tidy[6])
-
 
 # fix the dwelling type names
 tidy[,3] <- str_replace_all(tidy[,3], fixed("10."), "10")
@@ -84,11 +67,9 @@ tidy[,3] <- str_replace_all(tidy[,3], fixed("10."), "10")
 # remove the missing values
 tidy <-tidy[!(tidy[2]=="#DIV/0!"),]
 
-
 # Save the file, ready for upload
 #================================
 
 write.csv(tidy, "ratios for pipeline.csv", row.names=FALSE)
-
 
 # yaldi
