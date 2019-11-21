@@ -33,9 +33,10 @@ library("dplyr")
 library("stringr")
 library("readxl")
 
-# set the working directory
+# set the working directory. youll need to save the original HMRC files locally,
+# for import into R
+
 setwd("C:\\Users\\liam\\Desktop\\My files\\Data")
-setwd("//scotland.gov.uk//dc1//fs3_home//u441625//Statistics.gov.uk//Data Loading//2019.11 Tax Credits")
 
 list.files()
 
