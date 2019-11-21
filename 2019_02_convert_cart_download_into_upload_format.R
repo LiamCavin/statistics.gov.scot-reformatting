@@ -11,12 +11,10 @@
 #*****************************************************************************
 #=============================================================================
 
-
 # start with a clean slate
 #=========================
 
 rm(list=ls())
-
 
 # load in the approriate package
 # and any others that are needed 
@@ -26,14 +24,12 @@ rm(list=ls())
 # the tidyverse
 install.packages("tidyverse")
 
-
 # set the working directory
 #===========================
 
-setwd("//scotland.gov.uk//dc1//fs3_home//u441625//Statistics.gov.uk//Data Loading//2019.02 dwellings by type spc fix")
+setwd("")
 
 list.files()
-
 
 # Load in the data
 # 
@@ -63,7 +59,6 @@ pipe.format <- function(x,y) {
   return(pipe)
 }
 
-
 # run reformating function on dataset
 #=====================================
 
@@ -78,7 +73,6 @@ for (i in 4:14){
   pipe1 <- rbind(pipe1, pipe.format(cart,i))
 }
 
-
 # Reformat the text in the Time_Period column
 #============================================
 
@@ -91,7 +85,6 @@ head(pipe1)
 
 pipe1[,6] <-  str_replace_all(pipe1[,6], fixed("Semi.Detached"), "Semi-Detached")
 unique(pipe1[,6])
-
 
 # Output a file, ready for the pipeline
 #======================================
