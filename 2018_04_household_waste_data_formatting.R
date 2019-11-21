@@ -40,8 +40,7 @@ install.packages("tidyverse")
 # set the working directory
 #===========================
 
-setwd("//scotland.gov.uk//dc1//fs3_home//Z441625//Statistics.gov.uk//Data Loading//2018.04 Household waste")
-setwd("//scotland.gov.uk//dc1//fs3_home//Z441625//Statistics.gov.uk//Data Loading//Complete//2018.04 Household waste")
+setwd("")
 list.files()
 
 
@@ -113,4 +112,4 @@ unique(all.waste[,6])
 # and save the file, ready for upload
 write.csv(all.waste, "household waste for upload.csv", row.names=FALSE)
 
-          
+# yaldi          
