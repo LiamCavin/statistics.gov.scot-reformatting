@@ -2,6 +2,8 @@
 #
 # Script for formatting Scottish Fire and Rescue Service data for
 # upload to statistics.gov.scot
+#
+# raw data from https://www.firescotland.gov.uk/about-us/fire-and-rescue-statistics.aspx
 # 
 # Data, Statistics and Outcomes
 # Scottish Government
@@ -12,12 +14,10 @@
 #*****************************************************************************
 #=============================================================================
 
-
 # start with a clean slate
 #=========================
 
 rm(list=ls())
-
 
 # load in the approriate package
 # and any others that are needed 
@@ -32,10 +32,9 @@ library("stringr")
 # set the working directory
 #===========================
 
-setwd("//scotland.gov.uk//dc1//fs3_home//u441625//Statistics.gov.uk//Data Loading//2019.11 Fire incidents")
+setwd("")
 
 list.files()
-
 
 # Load in the SFRS data
 #======================
@@ -45,15 +44,8 @@ rawfire<- read.csv("firesbydatazone.csv")
 # extract data for most recent 2 years, as previous years data is revised
 fire<- subset(rawfire, FiscalYear == '2017-18'| FiscalYear == '2018-19')
 
-head(fire)
-tail(fire)
-summary(fire)
-typeof(fire)
-
 # in accident column, 1 = accidental fire, 0 = not accidental fire
-
 # in data zone column, some fires recorded as unknown data zone but assigned to council area
-
 
 # Calculate aggregate figures for all fires of any type and accident status,
 # for any datazone in each year.
@@ -71,8 +63,6 @@ datazones.agg$Units <- "Fires"                                                  
 datazones.agg$"Type of Fire" <- "All"                                                               #
 datazones.agg$"Accident Status" <- "All"                                                            #
 
-head(datazones.agg)
-
 # Calculate aggregate figures for each type of fire and only 'all' accident status,
 # for any datazone in each year.
 #===========================================================================
@@ -84,9 +74,6 @@ datazones.allaccident$DateCode <-  str_replace_all(datazones.allaccident$DateCod
 datazones.allaccident$Measurement <- "Count"                                                                            # create additional columns in correct format
 datazones.allaccident$Units <- "Fires"                                                                        #
 datazones.allaccident$"Accident Status" <- "All"                                                                        #
-
-head(datazones.allaccident)
-unique(datazones.allaccident[,3])
 
 # Calculate aggregate figures for each accident status and only 'all' type of fire,
 # for any datazone in each year.
@@ -102,15 +89,10 @@ datazones.alltype$"Type of Fire" <- "All"                                       
 datazones.alltype$"Accident Status" <-  str_replace_all(datazones.alltype$"Accident Status",                            # replace accident codes with text
                                                         c("1" = "Accidental", "0" = "Not Accidental"))
 
-head(datazones.alltype)
-unique(datazones.alltype[,3])
-
-
 # Calculate aggregate figures for all fires for any datazone in each year, 
 # broken down by accident status and type of fire.
 # Then format for statistics.gov.scot
 #===========================================================================
-
 
 datazones.breakdown <- fire %>% group_by(DataZone, FiscalYear, Accidental, IncidentType) %>%                     # count the number of fires for each datazone in each fiscal year
                                 summarize(count=n()) %>% data.frame                                              #
@@ -121,9 +103,6 @@ datazones.breakdown$"Accident Status" <-  str_replace_all(datazones.breakdown$"A
                                               c("1" = "Accidental", "0" = "Not Accidental"))                     #
 datazones.breakdown$Measurement <- "Count"                                                                       # create additional columns in correct format
 datazones.breakdown$Units <- "Fires"                                                                   #
-
-head(datazones.breakdown)                                   
-unique(datazones.breakdown[,4])
 
 # Reorder the columns in the dataframes, and merge them
 #======================================================
@@ -175,7 +154,6 @@ rm(list=ls())
 rawfire<- read.csv("FiresByDatazone.csv")
 fire<- subset(rawfire, FiscalYear == '2017-18'| FiscalYear == '2018-19')
 
-
 # Calculate aggregate figures for all fires of any type and accident status,
 # for any local authority in each year. Same for Scotland.
 # Then format for statistics.gov.scot
@@ -193,9 +171,6 @@ scot.la.agg$Units <- "Fires"                                                    
 scot.la.agg$"Type of Fire" <- "All"                                                            #
 scot.la.agg$"Accident Status" <- "All"                                                         #  
 
-head(scot.la.agg)
-tail(scot.la.agg)
-
 # Calculate aggregate figures for each type of fire and only all accident status,
 # for any council/scotland in each year.
 #===========================================================================
@@ -210,10 +185,6 @@ scot.la.allaccident$DateCode <-  str_replace_all(scot.la.allaccident$DateCode, "
 scot.la.allaccident$Measurement <- "Count"                                                                            # create additional columns in correct format
 scot.la.allaccident$Units <- "Fires"                                                                        #
 scot.la.allaccident$"Accident Status" <- "All"                                                                        #
-
-
-head(scot.la.allaccident)
-tail(scot.la.allaccident)
 
 # Calculate aggregate figures for each accident status and only all type of fire,
 # for any council/scotland in each year.
@@ -232,14 +203,10 @@ scot.la.alltype$"Type of Fire" <- "All"                                         
 scot.la.alltype$"Accident Status" <-  str_replace_all(scot.la.alltype$"Accident Status",                        # replace accident codes with sensible text
                                                         c("1" = "Accidental", "0" = "Not Accidental"))          #
 
-head(scot.la.alltype)
-tail(scot.la.alltype)
-
 # Calculate aggregate figures for all fires for any local authority in each year, 
 # broken down by accident status and type of fire. Same for Scotland
 # Then format for statistics.gov.scot
 #===========================================================================
-
 
 la.breakdown <- fire %>% group_by(LocalAuthority, FiscalYear, Accidental, IncidentType) %>% summarize(count=n()) %>% data.frame   # count the number of fires for each council in each fiscal year for all types of fire and all accident statuses
 scot.breakdown <- fire %>% group_by(FiscalYear, Accidental, IncidentType) %>% summarize(count=n()) %>% data.frame              # same for Scotland
@@ -252,10 +219,7 @@ scot.la.breakdown$"Accident Status" <-  str_replace_all(scot.la.breakdown$"Accid
                                                           c("1" = "Accidental", "0" = "Not Accidental"))     #
 scot.la.breakdown$Measurement <- "Count"                                                                     # create additional columns in correct format
 scot.la.breakdown$Units <- "Fires"                                                                 #
-      
-head(scot.la.breakdown)
-tail(scot.la.breakdown)               
-
+          
 # Reorder the columns in the dataframes, and merge them
 #======================================================
 
@@ -270,9 +234,8 @@ scot.la.allaccident <- scot.la.allaccident[,c('GeographyCode', 'DateCode',
 
 
 scotland.la.fire.counts <- rbind(scot.la.agg, scot.la.breakdown, scot.la.allaccident, scot.la.alltype)
-head(scotland.la.fire.counts)
 
-# but but but, a few councils have 0 fires for some combinations of variables, and these aren't reflected in the counts
+# a few councils have 0 fires for some combinations of variables, and these aren't reflected in the counts
 # create a dataframe of all potential combinations of councils/scotland, dates, accident status and type of fire
 
 list.geography <- unique(scotland.la.fire.counts[,1])                                                      # all datazones
@@ -284,20 +247,11 @@ names(all.possible.observations)  <- c("GeographyCode", "DateCode", "Accident St
 all.possible.observations$Measurement <- "Count"                                                           # add measurement variable
 all.possible.observations$"Units" <- "Fires"                                                     # add units variable
 
-head(all.possible.observations)
-dim(all.possible.observations)
-
-
-
 scotland.la.inc.nulls <- merge(all.possible.observations, scotland.la.fire.counts, all = TRUE)                 # merge the counts of fires with the potential combinations
 scotland.la.inc.nulls[is.na(scotland.la.inc.nulls)] <- 0                                                       # replace NA values with 0
 
-head(scotland.la.inc.nulls)
-dim(scotland.la.inc.nulls)
-
-
 #replace geography names with GSS codes from register
-unique(scotland.la.inc.nulls$GeographyCode)
+
 scotland.la.inc.nulls$GeographyCode <-  str_replace_all(scotland.la.inc.nulls$GeographyCode, c(
   "Fife" = "S12000047",
   "Perth & Kinross" =	"S12000048",
@@ -335,14 +289,4 @@ scotland.la.inc.nulls$GeographyCode <-  str_replace_all(scotland.la.inc.nulls$Ge
 
 write.csv(scotland.la.inc.nulls, "scotland and la fire data for upload to odpp.csv", row.names=FALSE)
 
-
 # yaldi
-
-
-
-
-
-
-
-
-
